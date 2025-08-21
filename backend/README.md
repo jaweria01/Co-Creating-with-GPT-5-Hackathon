@@ -16,7 +16,7 @@ This is the backend for the **EcoTrack** project, built with [FastAPI](https://f
 2. **Create and activate virtual environment**
 
 python -m venv venv
-# Activate (Windows PowerShell)
+*Activate (Windows PowerShell)*
 venv\Scripts\activate
 3. **Install dependencies**
 
@@ -27,7 +27,7 @@ The backend will be available at:
 👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 
-# 📖 API Endpoints
+## 📖 API Endpoints
 **GET /ping**
 *Example Response:*
 
@@ -51,5 +51,7 @@ Make sure you are always working inside the virtual environment (venv).
 After making changes, commit and push:
 
 git add .
+
 git commit -m "Updated backend"
+
 git push origin main
