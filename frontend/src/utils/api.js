@@ -1,4 +1,4 @@
-import { MOCK_DATA } from '../constants';
+import { MOCK_DATA, API_BASE_URL } from '../constants';
 
 // Helper for API calls with error handling
 async function apiFetch(endpoint, options = {}) {

@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-gray-800 bg-eco-light;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white p-6 rounded-lg shadow-md border border-eco-green/20;
+  }
+  .button {
+    @apply px-4 py-2 rounded-md font-semibold transition-colors;
+  }
+  .input {
+    @apply w-full p-3 border border-eco-green/30 rounded focus:outline-none focus:ring-2 focus:ring-eco-green;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
