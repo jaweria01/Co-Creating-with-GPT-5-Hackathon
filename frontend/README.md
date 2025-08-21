@@ -15,7 +15,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Setup
 
-1. Place `index.html` in the project root (`ecotrack-frontend/`).
+1. Place `index.html` in the project root (`frontend/`).
 2. Install dependencies: `npm install`
 3. Create `.env` with `REACT_APP_API_URL=http://your-backend-url`
 4. Run: `npm run dev`
