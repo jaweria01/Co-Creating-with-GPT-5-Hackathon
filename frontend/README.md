@@ -21,6 +21,7 @@ If you are developing a production application, we recommend using TypeScript wi
 4. Run: `npm run dev`
 5. Build: `npm run build`
 6. Preview: `npm run preview`
+7. Allow microphone access for voice features.
 
 ## Features
 
@@ -30,6 +31,18 @@ If you are developing a production application, we recommend using TypeScript wi
 - Mock API for demo; update `utils/api.js` for real backend.
 - Voice queries require microphone permission.
 
+## New Features
+
+- Chatbot as bottom-right modal, toggled by floating button.
+- Always-on wake word "hey eco buddy" detection.
+- Voice recording stops on silence.
+- Chatbot speaks responses.
+- Floating button animates on wake word if modal closed.
+
+## Browser Support
+
+- Best in Chrome/Edge for Web Speech API.
+
 ## Debugging
 
 - If blank screen, check console (F12) for errors.
@@ -37,6 +50,6 @@ If you are developing a production application, we recommend using TypeScript wi
 - Verify `tailwind.css` is imported in `main.jsx`.
 - Run `npm install` if dependencies are missing.
 - Clear Vite cache: `rm -rf node_modules/.vite`.
-- Check `SavingsLineChart.jsx` and `CarbonPieChart.jsx` for Chart.js errors.
+- Check `SavingsLineChart.jsx` and `CarbonPieChart.jsx` for Chart js errors.
 
 For backend integration, update `utils/api.js` to remove mocks.
