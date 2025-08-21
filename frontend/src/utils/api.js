@@ -41,3 +41,52 @@ export async function logActivity(action) {
     // Real: apiFetch('/log-activity', { method: 'POST', body: JSON.stringify({ action }) });
     return { success: true, points: 10, newBadge: 'Eco Hero' }; // Mock
 }
+
+
+export async function fetchChatHistory() {
+    // Real: apiFetch('/chat-history');
+    return []; // Mock empty
+}
+
+export async function saveChatHistory(messages) {
+    // Real: apiFetch('/chat-history', { method: 'POST', body: JSON.stringify(messages) });
+    console.log('Saved history:', messages); // Mock
+}
+
+export async function fetchGamificationData() {
+    // Real: apiFetch('/gamification');
+    return { points: 150, badges: ['Beginner', 'Eco Hero'], history: ['Logged LED switch', 'Reduced water'] }; // Mock
+}
+
+export async function loginUser(credentials) {
+    // Real: apiFetch('/login', { method: 'POST', body: JSON.stringify(credentials) });
+    return { success: true }; // Mock
+}
+
+export async function signupUser(credentials) {
+    // Real: apiFetch('/signup', { method: 'POST', body: JSON.stringify(credentials) });
+    return { success: true }; // Mock
+}
+
+export async function logoutUser() {
+    // Real: apiFetch('/logout', { method: 'POST' });
+    return { success: true }; // Mock
+}
+
+export async function fetchDeviceData() {
+    // Real: apiFetch('/devices');
+    return [
+        { id: 'Light1', status: 'On', usage: 5, suggestion: 'Switch to LED' },
+        { id: 'AC1', status: 'Off', usage: 20, suggestion: 'Set to 24°C' },
+    ]; // Test data
+}
+
+export async function connectDevice(deviceId) {
+    // Real: apiFetch('/connect-device', { method: 'POST', body: JSON.stringify({ deviceId }) });
+    return { id: deviceId, status: 'Connected', usage: 0, suggestion: 'Monitor usage' }; // Mock
+}
+
+export async function updateProfile(data) {
+    // Real: apiFetch('/update-profile', { method: 'PUT', body: JSON.stringify(data) });
+    return { success: true }; // Mock
+}
