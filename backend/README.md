@@ -15,43 +15,54 @@ This is the backend for the **EcoTrack** project, built with [FastAPI](https://f
    cd Co-Creating-with-GPT-5-Hackathon/backend
 2. **Create and activate virtual environment**
 
-python -m venv venv
+    ```bash
+    python -m venv venv
+    venv\Scripts\activate
 *Activate (Windows PowerShell)*
-venv\Scripts\activate
-3. **Install dependencies**
 
-pip install -r requirements.txt
+3. **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
 4. **Run the FastAPI server**
-uvicorn main:app --reload
+    ```bash
+    uvicorn main:app --reload
+
 The backend will be available at:
 👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 
 ## 📖 API Endpoints
+
 **GET /ping**
 *Example Response:*
 
 {
   "message": "pong"
 }
-POST /log-activity
+
+**POST /log-activity**
+
 *Example Request:*
 
 {
   "type": "walking"
 }
+
 *Example Response:*
+
 {
   "activity": "walking",
   "carbon_score": 42
 }
+
 # 👩‍💻 For Developers
+
 Make sure you are always working inside the virtual environment (venv).
 
 After making changes, commit and push:
 
-git add .
+- git add .
 
-git commit -m "Updated backend"
+- git commit -m "Updated backend"
 
-git push origin main
+- git push origin main
