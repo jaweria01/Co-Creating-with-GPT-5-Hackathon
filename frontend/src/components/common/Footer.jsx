@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-eco-green text-white py-6 mt-12">
+    <footer className="bg-primary-3 text-white py-6 mt-12 dark:bg-gray-800">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
@@ -31,6 +31,11 @@ function Footer() {
               <li>
                 <Link to="/devices" className="hover:underline">
                   Devices
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="hover:underline">
+                  About
                 </Link>
               </li>
             </ul>
