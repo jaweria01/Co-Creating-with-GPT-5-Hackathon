@@ -16,6 +16,8 @@ export default {
                 'tertiary-3': '#CBD5E0',
                 'tertiary-4': '#A0AEC0',
                 'tertiary-5': '#4A5568',
+                'light-blue': '#A5D6F5', // 50% less dark blue for light mode
+                'dark-blue': '#1E3A8A', // Dark blue for dark mode
             },
             fontSize: {
                 'xs': '0.75rem',

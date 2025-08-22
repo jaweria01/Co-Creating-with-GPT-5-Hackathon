@@ -1,3 +1,4 @@
+// src/utils/auth.js
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export function isLoggedIn() {
@@ -8,43 +9,76 @@ export function getUserName() {
   return localStorage.getItem('username') || '';
 }
 
-export async function loginUser({ username, password, idToken }) {
-  // Mock for testing
-  if (idToken) {
-    // Simulate Google Sign-In backend validation
-    localStorage.setItem('token', idToken);
-    localStorage.setItem('username', username || 'Google User');
-    return { ok: true };
-  }
-  if (username === 'test' && password === 'test123') {
+export async function loginUser({ emailOrUsername, password }) {
+  // Mock for testing with localStorage
+  if (emailOrUsername && password) {
     localStorage.setItem('token', 'mock-token');
-    localStorage.setItem('username', username);
+    localStorage.setItem('username', emailOrUsername);
     return { ok: true };
+  } else {
+    throw new Error('Invalid credentials');
   }
-  throw new Error('Invalid credentials');
+  // Real backend call (uncomment when backend ready)
+  /*
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ emailOrUsername, password }),
+  });
+  const data = await response.json();
+  if (response.ok) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    return { ok: true };
+  } else {
+    throw new Error(data.error || 'Login failed');
+  }
+  */
 }
 
-export async function signupUser({ username, name, password, country, idToken }) {
-  // Mock for testing
-  if (idToken) {
-    // Simulate Google Sign-Up backend validation
-    localStorage.setItem('token', idToken);
-    localStorage.setItem('username', username || name || 'Google User');
-    return { ok: true };
-  }
-  if (username && password) {
+export async function signupUser({ email, username, name, password, country }) {
+  // Mock for testing with localStorage
+  if (email && username && name && password && country) {
     localStorage.setItem('token', 'mock-token');
     localStorage.setItem('username', username);
     return { ok: true };
+  } else {
+    throw new Error('Invalid signup data');
   }
-  throw new Error('Invalid signup data');
+  // Real backend call (uncomment when backend ready)
+  /*
+  const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, username, name, password, country }),
+  });
+  const data = await response.json();
+  if (response.ok) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    return { ok: true };
+  } else {
+    throw new Error(data.error || 'Signup failed');
+  }
+  */
 }
 
 export async function logoutUser() {
+  // Mock for testing with localStorage
   localStorage.removeItem('token');
   localStorage.removeItem('username');
   return { ok: true };
+  // Real backend call (uncomment when backend ready)
+  /*
+  const response = await fetch(`${API_BASE_URL}/auth/logout`, { method: 'POST' });
+  if (response.ok) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+  }
+  return response;
+  */
 }
+
 
 // const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
