@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
 
 function Header({
   toggleChatbotModal,
@@ -14,10 +15,10 @@ function Header({
   const profileLetter = userName ? userName.charAt(0).toUpperCase() : "";
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-primary-3 text-neutral-950 dark:text-white shadow-md dark:bg-gray-800">
+    <nav className="fixed top-0 w-full z-50 bg-primary-3 text-tertiary-2 dark:text-white shadow-md dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">
-          EcoTrack 🌍
+        <Link to="/" className="text-2xl font-bold w-40">
+          <Logo />
         </Link>
         <button
           className="md:hidden text-3xl"

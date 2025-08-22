@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/common/Button";
 import { fetchGamificationData } from "../utils/api";
+import slide1 from "../assets/slide1.jpg";
+import slide2 from "../assets/slide2.webp";
+import slide3 from "../assets/slide3.jpg";
 
 function Home({ loggedIn }) {
   const [gamification, setGamification] = useState(null);
   const [slideIndex, setSlideIndex] = useState(0);
   const slides = [
-    { image: "/assets/slide1.jpg", text: "Track your eco-impact" },
-    { image: "/assets/slide2.jpg", text: "Get personalized tips" },
-    { image: "/assets/slide3.jpg", text: "Join challenges" },
+    { image: slide1, text: "Track your eco-impact" },
+    { image: slide2, text: "Get personalized tips" },
+    { image: slide3, text: "Join challenges" },
   ];
 
   useEffect(() => {
@@ -119,7 +122,7 @@ function Home({ loggedIn }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div className="p-4 bg-tertiary-1 rounded shadow dark:bg-gray-800">
             <img
-              src="/assets/member1.jpg"
+              src={slide1}
               alt="John Doe"
               className="w-32 h-32 rounded-full mx-auto"
             />
@@ -128,7 +131,7 @@ function Home({ loggedIn }) {
           </div>
           <div className="p-4 bg-tertiary-1 rounded shadow dark:bg-gray-800">
             <img
-              src="/assets/member2.jpg"
+              src={slide2}
               alt="Jane Smith"
               className="w-32 h-32 rounded-full mx-auto"
             />
@@ -137,7 +140,7 @@ function Home({ loggedIn }) {
           </div>
           <div className="p-4 bg-tertiary-1 rounded shadow dark:bg-gray-800">
             <img
-              src="/assets/member3.jpg"
+              src={slide3}
               alt="Alex Johnson"
               className="w-32 h-32 rounded-full mx-auto"
             />
