@@ -19,7 +19,7 @@ function About() {
     <div className="relative isolate overflow-hidden bg-light-blue py-24 sm:py-32 dark:bg-dark-blue animate-fade-in mg-t-eco-xs">
       <img
         alt="Eco-friendly background"
-        src="https://images.unsplash.com/photo-1501854140801-50d01607902b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2830&h=1500&q=80&blend=1E3A8A&sat=-50&exp=15&blend-mode=multiply"
+        src=""
         className="absolute inset-0 -z-10 size-full object-cover object-right md:object-center"
       />
       <div

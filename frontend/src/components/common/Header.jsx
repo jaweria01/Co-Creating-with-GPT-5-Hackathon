@@ -14,7 +14,7 @@ function Header({
   const profileLetter = userName ? userName.charAt(0).toUpperCase() : "";
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-primary-3 text-white shadow-md dark:bg-gray-800">
+    <nav className="fixed top-0 w-full z-50 bg-primary-3 text-neutral-950 shadow-md dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">
           EcoTrack 🌍

@@ -164,7 +164,7 @@ function Signup({ onAuth }) {
         onSubmit={handleSubmit}
         className="grid w-full max-w-sm grid-cols-1 gap-8"
       >
-        <Logo className="h-6 text-primary-3 dark:text-white" />
+        <Logo className="h-6 text-neutral-950 dark:text-white" />
         <Heading>Create your account</Heading>
         <Field>
           <Label>Email</Label>
@@ -256,6 +256,7 @@ function Signup({ onAuth }) {
           data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
           data-callback="handleCredentialResponse"
           data-auto_prompt="false"
+          text-neutral-950
         ></div>
         <div
           className="g_id_signin"

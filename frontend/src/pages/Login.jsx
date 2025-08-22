@@ -99,7 +99,7 @@ function Login({ onAuth }) {
         onSubmit={handleSubmit}
         className="grid w-full max-w-sm grid-cols-1 gap-8"
       >
-        <Logo className="h-6 text-primary-3 dark:text-white" />
+        <Logo className="h-6 text-neutral-950 dark:text-white" />
         <Heading>Sign in to your account</Heading>
         <Field>
           <Label>Email or Username</Label>
@@ -130,12 +130,16 @@ function Login({ onAuth }) {
             </TextLink>
           </Text>
         </div>
-        <Button
-          type="submit"
-          className="w-full bg-primary-3 text-white hover:bg-primary-2 dark:bg-gray-700 dark:hover:bg-gray-600"
-        >
-          Login
-        </Button>
+        <div>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary-3 text-white hover:bg-primary-2 dark:bg-gray-700 dark:hover:bg-gray-600"
+          >
+            <i className="fas fa-sign-in-alt mr-2"></i>
+            Login
+          </Button>
+        </div>
         <div
           id="g_id_onload"
           data-client_id={import.meta.env.VITE_GOOGLE_CLIENT_ID}
