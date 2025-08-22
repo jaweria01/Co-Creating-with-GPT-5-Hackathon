@@ -6,6 +6,7 @@ function Input({
   value,
   onChange,
   className = "",
+  autoComplete = "",
 }) {
   return (
     <input
@@ -14,6 +15,7 @@ function Input({
       value={value}
       onChange={onChange}
       className={`input ${className}`}
+      autoComplete={autoComplete}
     />
   );
 }
