@@ -51,11 +51,6 @@ function Header({
               About
             </Link>
           </li>
-          <li>
-            <button onClick={toggleChatbotModal} className="hover:underline">
-              Chatbot
-            </button>
-          </li>
           {!loggedIn && (
             <li>
               <Link to="/signup" className="hover:underline">
@@ -118,20 +113,10 @@ function Header({
                 About
               </Link>
             </li>
-            <li>
-              <button
-                onClick={() => {
-                  toggleChatbotModal();
-                  setIsMenuOpen(false);
-                }}
-              >
-                Chatbot
-              </button>
-            </li>
             {!loggedIn && (
               <li>
                 <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                  Create Account
+                  Signup
                 </Link>
               </li>
             )}
