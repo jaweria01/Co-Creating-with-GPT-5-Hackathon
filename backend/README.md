@@ -26,11 +26,11 @@ It powers the frontend by handling **user activity logging, gamification, and le
 
 2. **Create & activate virtual environment**
 
-```bash
-    python -m venv venv
-    venv\Scripts\activate    
-    source venv/bin/activate  
-```
+  ```bash
+   python -m venv venv
+   venv\Scripts\activate    
+   source venv/bin/activate  
+
 
 3. **Install dependencies**
 
@@ -115,13 +115,11 @@ Enables seamless leaderboard updates and cross-device syncing.
 
 Always work inside the virtual environment:
 
-  ```bash
-  venv\Scripts\activate
-  ```
+```venv\Scripts\activate
 
 After making changes:
 
-  ```bash
-  git add .
-  git commit -m "Updated backend"
-  git push origin main
+```
+    git add .
+    git commit -m "Updated backend"
+    git push origin main```
