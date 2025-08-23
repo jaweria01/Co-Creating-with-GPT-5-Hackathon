@@ -160,3 +160,20 @@ async def leaderboard():
         return {"leaderboard": leaderboard_data[:10]}  # top 10
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching leaderboard: {str(e)}")
+# stting CORS Error
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",                          # Local React dev
+    "https://co-creating-with-gpt-5-hackathon.vercel.app"  # Deployed frontend
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
