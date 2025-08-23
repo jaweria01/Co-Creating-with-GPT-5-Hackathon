@@ -27,20 +27,20 @@ It powers the frontend by handling **user activity logging, gamification, and le
 2. **Create & activate virtual environment**
 
   ```bash
-   python -m venv venv
-   venv\Scripts\activate    
-   source venv/bin/activate  
+  python -m venv venv
+  venv\Scripts\activate    
+  source venv/bin/activate  
 
 
 3. **Install dependencies**
 
   ```bash
-      pip install -r requirements.txt
+  pip install -r requirements.txt
 
 4. **Run the FastAPI server**
 
   ```bash
-      uvicorn main:app --reload --port 8000
+  uvicorn main:app --reload --port 8000
 
 
     The backend will be available at:
@@ -115,7 +115,8 @@ Enables seamless leaderboard updates and cross-device syncing.
 
 Always work inside the virtual environment:
 
-```venv\Scripts\activate
+  ```bash
+  venv\Scripts\activate
 
 After making changes:
 
