@@ -162,8 +162,6 @@ function Gamification() {
 }
 
 export default Gamification;
-
-// import React, { useEffect, useState } from "react";
 // import { fetchGamificationData } from "../utils/api";
 
 // function Gamification() {
