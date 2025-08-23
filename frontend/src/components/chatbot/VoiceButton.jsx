@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Button from "../common/Button";
 import { startVoiceRecordingWithSilenceDetection } from "../../utils/voice";
+import Mic from "../../assets/mic.png";
+import MicRecording from "../../assets/mic-recording.png";
 
 function VoiceButton({ onVoiceSubmit }) {
   const [isRecording, setIsRecording] = useState(false);
@@ -61,12 +63,16 @@ function VoiceButton({ onVoiceSubmit }) {
 
   return (
     <Button
-      text={isRecording ? "Stop Recording" : "🎤 Voice Query"}
+      text={
+        isRecording ? (
+          <img className="w-16" src={MicRecording} alt="Stop Recording" />
+        ) : (
+          <img className="w-16" src={Mic} alt="Start Recording" />
+        )
+      }
       onClick={toggleRecording}
-      className={`w-full mt-2 p-3.5 px-5 text-base font-medium ${
-        isRecording
-          ? "bg-red-600 text-white hover:bg-red-700"
-          : "bg-primary-3 text-white hover:bg-primary-2 dark:bg-gray-700 dark:hover:bg-gray-600"
+      className={` ${
+        isRecording ? "bg-none hover:bg-none" : "bg-none dark:bg-none"
       } transition-colors`}
       ariaLabel="Voice Query Button"
     />
@@ -75,7 +81,6 @@ function VoiceButton({ onVoiceSubmit }) {
 
 export default VoiceButton;
 
-// import React, { useState, useEffect } from "react";
 // import Button from "../common/Button";
 // import { startVoiceRecordingWithSilenceDetection } from "../../utils/voice";
 

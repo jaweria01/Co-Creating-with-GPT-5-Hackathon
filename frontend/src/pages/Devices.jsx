@@ -197,8 +197,6 @@ function Devices() {
 }
 
 export default Devices;
-
-// import React, { useEffect, useState } from "react";
 // import { fetchDeviceData, connectDevice } from "../utils/api";
 
 // function Devices() {
