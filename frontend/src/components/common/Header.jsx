@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
+import LightMode from "../../assets/light-mode.png";
+import DarkMode from "../../assets/dark-mode.png";
 
 function Header({
   toggleChatbotModal,
@@ -15,7 +17,7 @@ function Header({
   const profileLetter = userName ? userName.charAt(0).toUpperCase() : "";
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-primary-3 text-tertiary-2 dark:text-white shadow-md dark:bg-gray-800">
+    <nav className="fixed flex items-center top-0 w-full z-50 bg-primary-3 text-tertiary-2 dark:text-white shadow-md dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold w-40">
           <Logo />
@@ -81,11 +83,15 @@ function Header({
               {profileLetter}
             </li>
           )}
-          <li>
+          {/* <li>
             <button onClick={toggleDarkMode} className="hover:underline">
-              {darkMode ? "Light Mode" : "Dark Mode"}
+              {darkMode ? (
+                <img className="w-6" src={LightMode} alt="Light Mode" />
+              ) : (
+                <img className="w-6" src={DarkMode} alt="Dark Mode" />
+              )}
             </button>
-          </li>
+          </li> */}
         </ul>
         {isMenuOpen && (
           <ul className="absolute top-16 left-0 w-full bg-primary-3 flex flex-col space-y-4 p-4 md:hidden dark:bg-gray-800">
@@ -140,19 +146,31 @@ function Header({
                 </button>
               </li>
             )}
-            <li>
+            {/* <li>
               <button
                 onClick={() => {
                   toggleDarkMode();
                   setIsMenuOpen(false);
                 }}
               >
-                {darkMode ? "Light Mode" : "Dark Mode"}
+                {darkMode ? (
+                  <img className="w-6" src={LightMode} alt="Light Mode" />
+                ) : (
+                  <img className="w-6" src={DarkMode} alt="Dark Mode" />
+                )}
               </button>
-            </li>
+            </li> */}
           </ul>
         )}
       </div>
+
+      <button onClick={toggleDarkMode} className="hover:underline">
+        {darkMode ? (
+          <img className="w-6 mr-5" src={LightMode} alt="Light Mode" />
+        ) : (
+          <img className="w-6 mr-5" src={DarkMode} alt="Dark Mode" />
+        )}
+      </button>
     </nav>
   );
 }
