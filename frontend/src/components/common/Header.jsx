@@ -19,7 +19,7 @@ function Header({
   return (
     <nav className="fixed flex items-center top-0 w-full z-50 bg-primary-3 text-tertiary-2 dark:text-white shadow-md dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold w-40">
+        <Link to="/">
           <Logo />
         </Link>
         <button
@@ -176,8 +176,6 @@ function Header({
 }
 
 export default Header;
-
-// import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 
 // function Header({

@@ -81,7 +81,6 @@ function VoiceButton({ onVoiceSubmit }) {
 
 export default VoiceButton;
 
-// import React, { useState, useEffect } from "react";
 // import Button from "../common/Button";
 // import { startVoiceRecordingWithSilenceDetection } from "../../utils/voice";
 

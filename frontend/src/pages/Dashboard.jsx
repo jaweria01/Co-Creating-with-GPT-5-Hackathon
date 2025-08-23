@@ -76,8 +76,6 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-// import React, { useEffect, useState } from "react";
 // import CarbonPieChart from "../components/dashboard/CarbonPieChart";
 // import ProgressBar from "../components/dashboard/ProgressBar";
 // import SavingsLineChart from "../components/dashboard/SavingsLineChart";

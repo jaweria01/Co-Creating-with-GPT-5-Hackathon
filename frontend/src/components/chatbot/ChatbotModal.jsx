@@ -117,8 +117,6 @@ function ChatbotModal({ isOpen, onClose, loggedIn }) {
 }
 
 export default ChatbotModal;
-
-// import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import ChatBox from "./ChatBox";
 // import VoiceButton from "./VoiceButton";
