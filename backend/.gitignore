@@ -17,3 +17,5 @@ Thumbs.db
 
 # Environment variables
 .env
+# firebase credentials
+firebase_credentials.json
