@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
+import SendIcon from "../../assets/send-icon.png";
 
 function ChatBox({ onSubmit }) {
   const [input, setInput] = useState("");
@@ -22,9 +23,9 @@ function ChatBox({ onSubmit }) {
         className="flex-grow p-3.5 text-base bg-light-blue border-none outline-none text-gray-800 placeholder-gray-400 dark:bg-dark-blue dark:text-gray-200 dark:placeholder-gray-400"
       />
       <Button
-        text="Send"
+        text={<img className="w-6" src={SendIcon} alt="Send" />}
         type="submit"
-        className="bg-primary-3 text-white p-3.5 px-5 text-base font-medium hover:bg-primary-2 transition-colors dark:bg-gray-700 dark:hover:bg-gray-600"
+        className="bg-none p-3.5"
       />
     </form>
   );

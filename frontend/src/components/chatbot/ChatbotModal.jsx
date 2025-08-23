@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatBox from "./ChatBox";
 import VoiceButton from "./VoiceButton";
+import ChatIcon from "../../assets/chat-bot.png";
 import {
   sendChatQuery,
   sendVoiceQuery,
@@ -56,7 +57,7 @@ function ChatbotModal({ isOpen, onClose, loggedIn }) {
       const response = await sendChatQuery(text);
       handleResponse(response, text);
     } catch (err) {
-      handleResponse("⚠️ Oops! Couldn’t connect to Eco-Buddy.", text);
+      handleResponse("Oops! Couldn’t connect to Eco-Buddy.", text);
     }
   };
 
@@ -68,7 +69,7 @@ function ChatbotModal({ isOpen, onClose, loggedIn }) {
       handleResponse(response, transcribedText || "Voice Query");
     } catch (err) {
       handleResponse(
-        "⚠️ Oops! Couldn’t connect to Eco-Buddy.",
+        "Oops! Couldn’t connect to Eco-Buddy.",
         transcribedText || "Voice Query"
       );
     }
@@ -88,7 +89,12 @@ function ChatbotModal({ isOpen, onClose, loggedIn }) {
   return (
     <div className="fixed bottom-20 right-4 z-50 w-[90%] max-w-[600px] h-96 bg-light-blue rounded-2xl shadow-xl flex flex-col overflow-hidden dark:bg-dark-blue animate-fade-in">
       <div className="bg-primary-3 text-white p-4 text-center text-lg font-bold dark:bg-gray-700">
-        🌱 Eco-Buddy — Your Sustainability Coach
+        <img
+          src={ChatIcon}
+          alt="Chat Bot"
+          className="w-8 h-8 inline-block mr-2"
+        />
+        Eco-Buddy — Your Sustainability Coach
       </div>
       <div className="flex-grow p-4 overflow-y-auto bg-[#f1f8f6] dark:bg-gray-900 space-y-3 [scrollbar-width:thin] [scrollbar-color:#a5d6a7_transparent]">
         {messages.map((msg, index) => (

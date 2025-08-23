@@ -11,6 +11,7 @@ import Footer from "./components/common/Footer";
 import ChatbotModal from "./components/chatbot/ChatbotModal";
 import ProfileModal from "./components/common/ProfileModal";
 import Button from "./components/common/Button";
+import ChatIcon from "./assets/chat-bot.png";
 import { setupWakeWordListener } from "./utils/voice";
 import {
   isLoggedIn,
@@ -176,12 +177,14 @@ function App() {
           </main>
         </Suspense>
         <Button
-          text="🤖"
+          text=""
           onClick={toggleModal}
           className={`fixed bottom-4 right-4 z-50 w-12 h-12 rounded-full bg-primary-3 text-white shadow-lg flex items-center justify-center text-2xl hover:bg-primary-2 dark:bg-gray-700 dark:hover:bg-gray-600 ${
             isAnimating ? "animate-spin-light" : ""
           }`}
-        />
+        >
+          <img className="" src={ChatIcon} alt="Chat Bot" />
+        </Button>
         <ChatbotModal
           isOpen={isModalOpen}
           onClose={toggleModal}
