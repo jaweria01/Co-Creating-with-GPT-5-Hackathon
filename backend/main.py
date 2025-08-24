@@ -1,19 +1,17 @@
 # backend/main.py
 import os
+import datetime
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
-import os
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
-from datetime import datetime, timedelta
-# load .env inside backend folder
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+
 # -----------------------------
 # Load environment variables
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 api_key = os.getenv("GROQ_API_KEY")
 if not api_key:
     raise RuntimeError("GROQ_API_KEY not found in .env file")
@@ -23,6 +21,20 @@ client = Groq(api_key=api_key)
 
 # FastAPI app
 app = FastAPI(title="EcoTrack Groq Backend")
+
+# -----------------------------
+# CORS Middleware
+origins = [
+    "http://localhost:3000",  # Local React dev
+    "https://co-creating-with-gpt-5-hackathon.vercel.app"  # Deployed frontend
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # -----------------------------
 # Firebase init
@@ -41,8 +53,16 @@ class LogActivityRequest(BaseModel):
     activity: str
     points: int = 0
 
+class DeviceModel(BaseModel):
+    user_id: str
+    device_name: str
+
+class EnergyUsageModel(BaseModel):
+    user_id: str
+    usage_kwh: float
+
 # -----------------------------
-# Badges config
+# Badge Rules
 BADGE_RULES = {
     "Beginner": lambda points, activities, streak: points >= 50,
     "Eco Hero": lambda points, activities, streak: points >= 150,
@@ -54,7 +74,6 @@ BADGE_RULES = {
 
 # -----------------------------
 # Endpoints
-
 @app.get("/")
 def root():
     return {"message": "EcoTrack AI backend running with Groq!"}
@@ -63,6 +82,8 @@ def root():
 def ping():
     return {"status": "ok"}
 
+# -----------------------------
+# Chat Endpoint
 @app.post("/chat")
 async def chat(request: ChatRequest):
     try:
@@ -78,23 +99,23 @@ async def chat(request: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Groq API error: {str(e)}")
 
+# -----------------------------
+# Log Activity + Gamification
 @app.post("/log-activity")
 async def log_activity(request: LogActivityRequest):
     try:
         user_ref = db.collection("users").document(request.user_id)
         user_doc = user_ref.get()
 
-        # If user does not exist, create new record
         if not user_doc.exists:
-            user_ref.set({"points": 0, "badges": [], "streak": 0, "last_activity": None})
+            user_ref.set({"points": 0, "badges": [], "streak": 0, "last_activity": None, "activities": {}})
 
         user_data = user_ref.get().to_dict()
 
-        # ✅ Safely add points
+        # Points update
         new_points = user_data.get("points", 0) + request.points
 
-        # ✅ Update streak
-        import datetime
+        # Streak update
         today = datetime.date.today()
         last_activity_date = user_data.get("last_activity")
         if last_activity_date:
@@ -106,26 +127,31 @@ async def log_activity(request: LogActivityRequest):
         else:
             user_data["streak"] = 1
 
-        # ✅ Badge logic
+        # Track activities
+        activities = user_data.get("activities", {})
+        activity_type = request.activity.lower()
+        if "water" in activity_type:
+            activities["water"] = activities.get("water", 0) + 1
+        elif "energy" in activity_type:
+            activities["energy"] = activities.get("energy", 0) + 1
+        else:
+            activities["other"] = activities.get("other", 0) + 1
+
+        # Badge logic
         badges = set(user_data.get("badges", []))
         new_badges = []
+        for badge, rule in BADGE_RULES.items():
+            if rule(new_points, activities, user_data["streak"]) and badge not in badges:
+                badges.add(badge)
+                new_badges.append(badge)
 
-        if new_points >= 50 and "Beginner" not in badges:
-            badges.add("Beginner")
-            new_badges.append("Beginner")
-        if new_points >= 100 and "Eco Hero" not in badges:
-            badges.add("Eco Hero")
-            new_badges.append("Eco Hero")
-        if request.activity.lower().find("water") != -1 and "Water Saver" not in badges:
-            badges.add("Water Saver")
-            new_badges.append("Water Saver")
-
-        # ✅ Save back to Firestore
+        # Save user data
         user_ref.update({
             "points": new_points,
             "badges": list(badges),
             "streak": user_data["streak"],
             "last_activity": today.isoformat(),
+            "activities": activities
         })
 
         return {
@@ -135,10 +161,11 @@ async def log_activity(request: LogActivityRequest):
             "new_badges": new_badges,
             "streak": user_data["streak"],
         }
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error logging activity: {str(e)}")
 
+# -----------------------------
+# Leaderboard
 @app.get("/leaderboard")
 async def leaderboard():
     try:
@@ -151,29 +178,111 @@ async def leaderboard():
             leaderboard_data.append({
                 "user_id": user.id,
                 "points": data.get("points", 0),
-                "badges": data.get("badges", [])
+                "badges": data.get("badges", []),
+                "streak": data.get("streak", 0)
             })
 
-        # Sort by points descending
         leaderboard_data.sort(key=lambda x: x["points"], reverse=True)
-
-        return {"leaderboard": leaderboard_data[:10]}  # top 10
+        return {"leaderboard": leaderboard_data[:10]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching leaderboard: {str(e)}")
-# stting CORS Error
-from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "http://localhost:3000",                          # Local React dev
-    "https://co-creating-with-gpt-5-hackathon.vercel.app"  # Deployed frontend
-]
+# -----------------------------
+# User Progress
+@app.get("/user/{user_id}")
+async def get_user(user_id: str):
+    try:
+        user_ref = db.collection("users").document(user_id)
+        user_doc = user_ref.get()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        if not user_doc.exists:
+            raise HTTPException(status_code=404, detail="User not found")
 
+        user_data = user_doc.to_dict()
+        return {
+            "user_id": user_id,
+            "points": user_data.get("points", 0),
+            "badges": user_data.get("badges", []),
+            "streak": user_data.get("streak", 0),
+            "activities": user_data.get("activities", {}),
+            "last_activity": user_data.get("last_activity"),
+            "devices": user_data.get("devices", []),
+            "energy_usage": user_data.get("energy_usage", 0),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching user data: {str(e)}")
 
+# -----------------------------
+# Device Management
+@app.post("/connect-device/")
+async def connect_device(request: DeviceModel):
+    try:
+        user_ref = db.collection("users").document(request.user_id)
+        user_doc = user_ref.get()
+        if not user_doc.exists:
+            user_ref.set({"points": 0, "badges": [], "streak": 0, "devices": [], "energy_usage": 0})
+
+        user_data = user_ref.get().to_dict()
+        devices = user_data.get("devices", [])
+
+        if request.device_name not in devices:
+            devices.append(request.device_name)
+            user_ref.update({"devices": devices})
+
+            # Award points
+            points = user_data.get("points", 0) + 20
+            user_ref.update({"points": points})
+
+        return {"message": f"Device '{request.device_name}' connected", "devices": devices}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error connecting device: {str(e)}")
+
+@app.post("/energy-usage/")
+async def energy_usage(request: EnergyUsageModel):
+    try:
+        user_ref = db.collection("users").document(request.user_id)
+        user_doc = user_ref.get()
+        if not user_doc.exists:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_data = user_doc.to_dict()
+        user_ref.update({"energy_usage": request.usage_kwh})
+
+        points = user_data.get("points", 0)
+        if request.usage_kwh < 400:  # threshold
+            points += 10
+            user_ref.update({"points": points})
+
+        return {"message": "Energy usage updated", "usage_kwh": request.usage_kwh}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating energy usage: {str(e)}")
+
+@app.get("/eco-suggestions/{user_id}")
+async def eco_suggestions(user_id: str):
+    try:
+        user_ref = db.collection("users").document(user_id)
+        user_doc = user_ref.get()
+        if not user_doc.exists:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user_data = user_doc.to_dict()
+        suggestions = []
+
+        if user_data.get("energy_usage", 0) > 500:
+            suggestions.append("Your energy use is high. Try reducing AC usage or switching to LED lights.")
+
+        if "solar_panel" in user_data.get("devices", []):
+            suggestions.append("Great! Optimize your solar usage by running appliances in the daytime.")
+
+        if user_data.get("streak", 0) < 3:
+            suggestions.append("Start small! Turn off unused lights daily to build a green habit.")
+
+        if user_data.get("points", 0) > 200:
+            suggestions.append("You’re doing amazing! Try advanced eco steps like composting or rainwater harvesting.")
+
+        if not suggestions:
+            suggestions.append("Keep up the good work! Remember to unplug devices when not in use.")
+
+        return {"user_id": user_id, "eco_suggestions": suggestions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating suggestions: {str(e)}")

@@ -46,14 +46,22 @@ export async function fetchCarbonData() {
 // voice chatbot 
 export async function sendChatQuery(text) {
     try {
-        const response = await apiFetch('/chat', {
+        const response = await fetch('https://jawadah1-ecobuddy-chat.hf.space/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text }),  // Send the user's message
         });
 
-        if (response && response.reply) {
-            return response.reply;  // Return the reply from the chatbot API
+        if (!response.ok) {
+            // Handle HTTP errors
+            console.error("Error from server:", response.status, response.statusText);
+            return 'Eco-Buddy: Unable to get a response from the server';
+        }
+
+        const data = await response.json();
+
+        if (data && data.reply) {
+            return data.reply;  // Return the reply from the chatbot API
         }
 
         return 'Eco-Buddy: Unable to get a response from the server';  // Fallback message
