@@ -31,49 +31,93 @@ function ChatbotModal({ isOpen, onClose, loggedIn }) {
   };
 
   const processQuery = async (text) => {
-    if (text.toLowerCase().includes("about the website")) {
-      const response =
-        "EcoTrack is an AI for sustainable living. Features: Personalized actions, dashboard, chatbot. Login to access full features.";
-      handleResponse(response, text);
-      return;
-    }
-    if (!loggedIn) {
-      const response =
-        "Please login to perform actions. How the site works: Track eco actions, earn badges. Login or create account!";
-      handleResponse(response, text);
-      return;
-    }
-    if (text.includes("switch to dashboard")) {
-      navigate("/dashboard");
-      handleResponse("Switching to dashboard!", text);
-      return;
-    } else if (text.includes("log activity")) {
-      const activity = text.split("log activity")[1].trim();
-      await logActivity(activity);
-      handleResponse(`Activity logged: ${activity}. Points awarded!`, text);
-      return;
-    }
-    try {
-      const response = await sendChatQuery(text);
-      handleResponse(response, text);
-    } catch (err) {
-      handleResponse("Oops! Couldn’t connect to Eco-Buddy.", text);
-    }
-  };
+  if (text.toLowerCase().includes("about the website")) {
+    const response =
+      "EcoTrack is an AI for sustainable living. Features: Personalized actions, dashboard, chatbot. Login to access full features.";
+    handleResponse(response, text);
+    return;
+  }
+
+  if (!loggedIn) {
+    const response =
+      "Please login to perform actions. How the site works: Track eco actions, earn badges. Login or create account!";
+    handleResponse(response, text);
+    return;
+  }
+
+  if (text.includes("switch to dashboard")) {
+    navigate("/dashboard");
+    handleResponse("Switching to dashboard!", text);
+    return;
+  } else if (text.includes("log activity")) {
+    const activity = text.split("log activity")[1].trim();
+    await logActivity(activity);
+    handleResponse(`Activity logged: ${activity}. Points awarded!`, text);
+    return;
+  }
+
+  try {
+    const response = await sendChatQuery(text);  // Call the adjusted API
+    handleResponse(response, text);
+  } catch (err) {
+    handleResponse("Oops! Couldn’t connect to Eco-Buddy.", text);
+  }
+};
+
+const handleVoiceSubmit = async (audioBlob, transcribedText) => {
+  try {
+    const response = await sendVoiceQuery(audioBlob);  // Call the adjusted API
+    handleResponse(response, transcribedText || "Voice Query");
+  } catch (err) {
+    handleResponse("Oops! Couldn’t connect to Eco-Buddy.", transcribedText || "Voice Query");
+  }
+};
+
+
+  // const processQuery = async (text) => {
+  //   if (text.toLowerCase().includes("about the website")) {
+  //     const response =
+  //       "EcoTrack is an AI for sustainable living. Features: Personalized actions, dashboard, chatbot. Login to access full features.";
+  //     handleResponse(response, text);
+  //     return;
+  //   }
+  //   if (!loggedIn) {
+  //     const response =
+  //       "Please login to perform actions. How the site works: Track eco actions, earn badges. Login or create account!";
+  //     handleResponse(response, text);
+  //     return;
+  //   }
+  //   if (text.includes("switch to dashboard")) {
+  //     navigate("/dashboard");
+  //     handleResponse("Switching to dashboard!", text);
+  //     return;
+  //   } else if (text.includes("log activity")) {
+  //     const activity = text.split("log activity")[1].trim();
+  //     await logActivity(activity);
+  //     handleResponse(`Activity logged: ${activity}. Points awarded!`, text);
+  //     return;
+  //   }
+  //   try {
+  //     const response = await sendChatQuery(text);
+  //     handleResponse(response, text);
+  //   } catch (err) {
+  //     handleResponse("Oops! Couldn’t connect to Eco-Buddy.", text);
+  //   }
+  // };
 
   const handleTextSubmit = (text) => processQuery(text);
 
-  const handleVoiceSubmit = async (audioBlob, transcribedText) => {
-    try {
-      const response = await sendVoiceQuery(audioBlob);
-      handleResponse(response, transcribedText || "Voice Query");
-    } catch (err) {
-      handleResponse(
-        "Oops! Couldn’t connect to Eco-Buddy.",
-        transcribedText || "Voice Query"
-      );
-    }
-  };
+  // const handleVoiceSubmit = async (audioBlob, transcribedText) => {
+  //   try {
+  //     const response = await sendVoiceQuery(audioBlob);
+  //     handleResponse(response, transcribedText || "Voice Query");
+  //   } catch (err) {
+  //     handleResponse(
+  //       "Oops! Couldn’t connect to Eco-Buddy.",
+  //       transcribedText || "Voice Query"
+  //     );
+  //   }
+  // };
 
   const speakResponse = (text) => {
     if ("speechSynthesis" in window) {
