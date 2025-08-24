@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://ef692f0699fb.ngrok-free.app' || 'http://127.0.0.1:8000';
+export const API_BASE_URL = 'https://ae163ea1e651.ngrok-free.app' || 'http://127.0.0.1:8000';
 
 export const COLORS = {
     primary: '#10B981', // eco-green

@@ -1,27 +1,41 @@
-import { MOCK_DATA, API_BASE_URL } from '../constants';
+import { MOCK_DATA } from '../constants';
 
 // Helper for API calls with error handling
+const API_BASE_URL = "https://ae163ea1e651.ngrok-free.app"; // no trailing slash!
+
 async function apiFetch(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;  // Use the API_BASE_URL from constants
-    try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            // Try to get error details from response
-            let errorDetails = 'API error';
-            try {
-                const errorData = await response.json();
-                errorDetails = JSON.stringify(errorData, null, 2);
-            } catch (e) {
-                errorDetails = `API error: ${response.status} ${response.statusText}`;
-            }
-            throw new Error(`API request failed: ${errorDetails}`);
-        }
-        return await response.json();  // Return the JSON data if the request is successful
-    } catch (error) {
-        console.error(error);
-        return null;  // Return null if there's an error
+  const url = `${API_BASE_URL}${endpoint}`;
+  console.log("➡️ Fetching:", url);
+
+  try {
+    const isFormData = options.body instanceof FormData;
+
+    const res = await fetch(url, {
+      method: options.method || "GET",
+      headers: isFormData
+        ? options.headers || {} // agar FormData hai to Content-Type browser set karega
+        : {
+            "Content-Type": "application/json",
+            ...(options.headers || {}),
+          },
+      body: options.body ? (isFormData ? options.body : JSON.stringify(options.body)) : null,
+    });
+
+    const contentType = res.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      const text = await res.text();
+      console.error("❌ Expected JSON but got:", text.slice(0, 200));
+      throw new Error(`Invalid JSON response. Content type: ${contentType}`);
     }
+
+    return await res.json();
+  } catch (err) {
+    console.error("apiFetch error:", err);
+    return null;
+  }
 }
+
+
 
 // Mock functions for demo; replace with real backend calls
 export async function fetchCarbonData() {
@@ -29,6 +43,7 @@ export async function fetchCarbonData() {
     return MOCK_DATA;
 }
 
+// voice chatbot 
 export async function sendChatQuery(text) {
     try {
         const response = await apiFetch('/chat', {
@@ -47,7 +62,6 @@ export async function sendChatQuery(text) {
         return 'Eco-Buddy: Something went wrong. Please try again later.';  // Better error message
     }
 }
-
 
 export async function sendVoiceQuery(audioBlob) {
     const formData = new FormData();
@@ -71,48 +85,63 @@ export async function sendVoiceQuery(audioBlob) {
 }
 
 
-
+// log activity 
 export async function logActivity(action) {
     try {
-        // Get user ID from localStorage (from auth system)
-        // In the mock auth system, we use username as user identifier
         let userId = localStorage.getItem('username') || 'anonymous';
-        
-        // If no username, generate a simple ID
-        if (!userId) {
-            userId = 'user_' + Date.now(); // Simple ID based on timestamp
-        }
-        
+
         const response = await apiFetch('/log-activity', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user_id: userId,
                 activity: action,
-                points: 0  // Default to 0 points, let the backend calculate
+                points: 0 // let backend calculate points
             })
         });
-        
-        // If we get a response from the API, use it
+
         if (response) {
-            // Transform the API response to match what Dashboard.jsx expects
             return {
                 success: true,
                 points: response.points || 0,
-                newBadge: response.new_badges && response.new_badges.length > 0 ? response.new_badges[0] : '',
+                newBadge: response.new_badges?.length ? response.new_badges[0] : '',
                 message: response.message || 'Activity logged successfully',
-                ...response // Include any other properties from the API response
+                ...response
             };
         }
-        
-        // Fallback response if API doesn't return data
-        return { success: true, points: 10, newBadge: 'Eco Hero' };
+
+        return { success: false, points: 0, newBadge: '', error: 'No response from API' };
     } catch (error) {
         console.error("Error in logActivity:", error);
-        // Return fallback response in case of error to maintain UI functionality
         return { success: false, points: 0, newBadge: '', error: 'Something went wrong while logging activity' };
     }
 }
+
+// leaderboard
+// leaderboard
+export async function fetchLeaderboard() {
+  try {
+    const data = await apiFetch('/leaderboard'); // API call
+
+    if (!data || !data.leaderboard) return [];
+
+    // Map API response to frontend-friendly format
+    return data.leaderboard.map(u => ({
+      name: u.user_id,
+      badge: u.badges?.length ? u.badges[u.badges.length - 1] : "",
+      score: u.points || 0,
+      streak: u.streak || 0,
+    }));
+  } catch (error) {
+    console.error("Error in fetchLeaderboard:", error);
+    return [];
+  }
+}
+
+
+
+
+
 
 export async function fetchChatHistory() {
     // Real: apiFetch('/chat-history');
@@ -131,8 +160,7 @@ export async function fetchGamificationData() {
         
         // If we get a response, transform it to match the expected format
         if (response) {
-            // Transform the leaderboard response to match the expected structure
-            // This will depend on the actual API response format
+             
             return {
                 points: response.points || response.user_points || 0,
                 badges: response.badges || response.user_badges || [],

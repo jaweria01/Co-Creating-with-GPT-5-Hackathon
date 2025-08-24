@@ -13,6 +13,9 @@ function Leaderboard({ users }) {
             {user.badge && (
               <span className="text-eco-green">({user.badge} 🌳)</span>
             )}
+            <span className="ml-2 text-xs text-gray-500">
+              🔥 {user.streak}d streak
+            </span>
           </span>
           <span className="font-bold">{user.score} pts</span>
         </li>
